@@ -2,24 +2,41 @@
 #'
 #' This function reads N38 binary files into R and does some minimal
 #' pre-processing.
-#' @param path A file path pointing to a valid *.N38 file, produced by a Geonics
+#' @param path A file path pointing to a valid file, produced by a Geonics
 #'   EM38-MK2 conductivity sensor connected to an Allegra CX or Archer
-#'   datalogger (and optionally, a GPS device).
+#'   datalogger (N38) or connected through Geomar TackMaker software (382)
+#'   (and optionally, a GPS device).
+#' @param type A file extension, one of either N38 (Geonics) or N382 (Geomar)
 #' @return A matrix with n rows and 25 columns, containing raw bytes.
 #' @examples
 #' n38_mat <-
-#'   n38_import(system.file("extdata", "em38_demo.N38", package = "em38"))
+#'   n38_import(system.file("extdata", "em38_demo.N38", package = "em38"), type = "N38")
+#' n38_mat <-
+#'   n38_import(system.file("extdata", "em38_demo.382", package = "em38"), type = "N382")
 #' @export
 #'
-n38_import <- function(path = NULL) {
+n38_import <- function(path = NULL, type = NULL) {
 
   n38_con <- file(path, open = 'rb')
   n38_raw <- readBin(n38_con, what = raw(), n = file.size(path))
   close(n38_con)
 
-  n38_mat <- matrix(n38_raw, ncol = 26, byrow = TRUE)
-  # chuck the line end column
-  n38_mat[, -26]
+  if(type=="N38"){
+    n38_mat <- matrix(n38_raw, ncol = 26, byrow = TRUE)
+    # chuck the line end column
+    n38_mat[, -26]
+
+  }else if(type=="N382"){
+    n38_mat <- matrix(n38_raw, ncol = 27, byrow = TRUE) #the Geomar file has 27
+    # chuck the line end column
+    n38_mat <- n38_mat[, -27]
+    #for Geomar data, we need to re-organize to get calibration data in right place
+    n38_mat[c(1:3,10:13,4:9,14:nrow(n38_mat)), ] #need to re-order header rows in raw matrix
+
+     }else{
+
+    print("Please specify the tile extension, one of N38 (Geonics) or 382 (Geomar)")
+  }
 }
 
 #' Separate message types

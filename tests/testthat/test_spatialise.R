@@ -84,7 +84,7 @@ test_that(
   c(
     from_file <-
       em38_from_file(path = system.file("extdata", "em38_demo.N38",
-                                       package = "em38"), hdop_filter = 3),
+                                       package = "em38"), type="N38", hdop_filter = 3),
     data('n38_demo'),
     n38_chunks  <- n38_chunk(n38_demo),
     n38_decoded <- n38_decode(n38_chunks),

@@ -399,6 +399,7 @@ em38_decode <- function(n38_decoded = NULL, hdop_filter = 3,
 #' @param path A file path pointing to a valid *.N38 file, produced by a
 #'   Geonics EM38-MK2 conductivity sensor connected to an Allegra CX or Archer
 #'   datalogger (and optionally, a GPS device).
+#' @param type A file extension, one of either N38 (Geonics) or N382 (Geomar)
 #' @param hdop_filter Numeric, discard GPS data where the Horizontal Dilution of
 #'   Precision is greater than this number. Defaults to 3 metres. Set to NULL to
 #'   keep all readings.
@@ -429,12 +430,12 @@ em38_decode <- function(n38_decoded = NULL, hdop_filter = 3,
 #' @examples
 #' demo_survey <-
 #' em38_from_file(path = system.file("extdata", "em38_demo.N38", package = "em38"),
-#'               hdop_filter = 3)
+#'               hdop_filter = 3, type="N38")
 #' @export
 #'
-em38_from_file <- function(path = NULL, hdop_filter = 3,
-                           time_filter = 5, fix_filter = NULL) {
-  mat  <- n38_import(path)
+em38_from_file <- function(path = NULL, type = NULL,
+                           hdop_filter = 3, time_filter = 5, fix_filter = NULL) {
+  mat  <- n38_import(path, type)
   chnk <- n38_chunk(mat)
   dec  <- n38_decode(chnk)
 

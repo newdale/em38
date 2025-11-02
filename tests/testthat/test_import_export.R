@@ -6,7 +6,7 @@ context('import/export functions')
 test_that(
   'read from binary works as it should',
   c(
-    n38_mat <- n38_import(system.file("extdata", "em38_demo.N38", package = "em38")),
+    n38_mat <- n38_import(system.file("extdata", "em38_demo.N38", package = "em38"), type="N38"),
     expect_is(n38_mat, 'matrix'),
     expect_type(n38_mat, 'raw'),
     expect_equal(dim(n38_mat)[2], 25L),

@@ -1,0 +1,12 @@
+#' Data: imported N38 track file
+#'
+#' A dataset representing a track driven by an ATV towing an EM38-MK2
+#' instrument connected to an NOT SURE datalogger with Geomar TRack Maker
+#' software and an Emlid Reach RS3 GPS receiver.
+#'
+#' @format A matrix of raw bytes, 27 columns by 23729 rows, created by calling
+#'   \code{\link{n38_import}} on \code{system.file("extdata", "em38_demo.382",
+#'   package = "em38")}.
+#' @source This dataset was recorded on a farm in Canada. Add some details.
+#'
+"n382_demo"

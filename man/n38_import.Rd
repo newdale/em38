@@ -4,12 +4,15 @@
 \alias{n38_import}
 \title{Import EM38 data}
 \usage{
-n38_import(path = NULL)
+n38_import(path = NULL, type = NULL)
 }
 \arguments{
-\item{path}{A file path pointing to a valid *.N38 file, produced by a Geonics
+\item{path}{A file path pointing to a valid file, produced by a Geonics
 EM38-MK2 conductivity sensor connected to an Allegra CX or Archer
-datalogger (and optionally, a GPS device).}
+datalogger (N38) or connected through Geomar TackMaker software (382)
+(and optionally, a GPS device).}
+
+\item{type}{A file extension, one of either N38 (Geonics) or N382 (Geomar)}
 }
 \value{
 A matrix with n rows and 25 columns, containing raw bytes.
@@ -20,5 +23,7 @@ pre-processing.
 }
 \examples{
 n38_mat <-
-  n38_import(system.file("extdata", "em38_demo.N38", package = "em38"))
+  n38_import(system.file("extdata", "em38_demo.N38", package = "em38"), type = "N38")
+n38_mat <-
+  n38_import(system.file("extdata", "em38_demo.382", package = "em38"), type = "N382")
 }

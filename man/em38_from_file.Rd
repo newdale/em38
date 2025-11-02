@@ -6,6 +6,7 @@
 \usage{
 em38_from_file(
   path = NULL,
+  type = NULL,
   hdop_filter = 3,
   time_filter = 5,
   fix_filter = NULL
@@ -15,6 +16,8 @@ em38_from_file(
 \item{path}{A file path pointing to a valid *.N38 file, produced by a
 Geonics EM38-MK2 conductivity sensor connected to an Allegra CX or Archer
 datalogger (and optionally, a GPS device).}
+
+\item{type}{A file extension, one of either N38 (Geonics) or N382 (Geomar)}
 
 \item{hdop_filter}{Numeric, discard GPS data where the Horizontal Dilution of
 Precision is greater than this number. Defaults to 3 metres. Set to NULL to
@@ -55,5 +58,5 @@ data.
 \examples{
 demo_survey <-
 em38_from_file(path = system.file("extdata", "em38_demo.N38", package = "em38"),
-              hdop_filter = 3)
+              hdop_filter = 3, type="N38")
 }
