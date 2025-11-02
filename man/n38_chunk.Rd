@@ -22,5 +22,7 @@ header and survey line information for further processing.
 }
 \examples{
 data('n38_demo')
+data(n382_demo)
 n38_chunks <- n38_chunk(n38_demo)
+n382_chunks<- n38_chunk(n382_demo)
 }

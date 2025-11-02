@@ -22,6 +22,6 @@ msg_2 <- "$GPG5808.00,2726.53758,S,15126.05255,E,1,08,1.0,365.1,M,39.5,M,,*79"
 msg_3<- "$GNGGA,201703.40,4952.9329190,N,10012.1760775,W,4,24,0.7,364.311,M,-23.378,M,1.4,0000*6A"
 chk_1 <- em38:::nmea_check(string = msg_1)
 chk_2 <- em38:::nmea_check(string = msg_2)
-chk_3 <- nav38:::nmea_check(string = msg_3)
+chk_3 <- em38:::nmea_check(string = msg_3)
 
 }

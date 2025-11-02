@@ -51,7 +51,9 @@ n38_import <- function(path = NULL, type = NULL) {
 #'   comments.
 #' @examples
 #' data('n38_demo')
+#' data(n382_demo)
 #' n38_chunks <- n38_chunk(n38_demo)
+#' n382_chunks<- n38_chunk(n382_demo)
 #' @export
 #'
 n38_chunk <- function(n38_mat = NULL) {
@@ -68,7 +70,7 @@ n38_chunk <- function(n38_mat = NULL) {
   # populate said list with parts of the input matrix as appropriate
 
   # file header
-  fh_rns <- match('E', rids)
+  ifelse(!is.na(match('E', rids)), fh_rns<- match('E',rids), fh_rns<- match('N',rids))
   out_list[['file_header']] <- n38_mat[fh_rns:(fh_rns + 1), ]
 
   # get each survey line start and end row numbers into two vectors
