@@ -42,7 +42,7 @@ This package allows users to incorporate EM38-MKII data into a fully reproducibl
 ```{r 'demo1'}
 demo_survey <-
   em38_from_file(path = system.file("extdata", "em38_demo.N38", 
-                                    package = "em38"),
+                                    package = "em38"), type="N38",
                  hdop_filter = 3)
 
 sl1 <- demo_survey$survey_lines[[1]]
@@ -254,7 +254,7 @@ tps_ss <- supercells(cond_05_tps_b, k = 3, compactness = 0.1)
 
 ggplot(cond_05_tps_b_df) +
   geom_raster(aes(x = x ,y = y, fill = lyr.1), alpha = 0.8) +
-  geom_sf(data = tps_ss, aes(colour = 'supercells'), pch = 20,
+  geom_sf(data = tps_ss, pch = 20,
           size = 0.5, show.legend = 'lines', fill = NA) +
   scale_fill_viridis_c() +
   scale_colour_manual(values = 'grey20') +
