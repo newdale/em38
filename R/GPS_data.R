@@ -7,23 +7,29 @@
 #' # first G*GGA msg from data('n38_demo')
 #' msg_1 <- "$GPGGA,015808.00,2726.53758,S,15126.05255,E,1,08,1.0,365.1,M,39.5,M,,*79"
 #' msg_2 <- "$GPG5808.00,2726.53758,S,15126.05255,E,1,08,1.0,365.1,M,39.5,M,,*79"
+#' msg_3<- "$GNGGA,201703.40,4952.9329190,N,10012.1760775,W,4,24,0.7,364.311,M,-23.378,M,1.4,0000*6A"
 #' chk_1 <- em38:::nmea_check(string = msg_1)
 #' chk_2 <- em38:::nmea_check(string = msg_2)
+#' chk_3 <- nav38:::nmea_check(string = msg_3)
 #'
-nmea_check <- function(string = NULL) {
+nmea_check <- function(string = NULL) {# changed most of this function from original
   prs <- unlist(strsplit(string, '\\*'))[1]
   # lower case required for comparison
-  chk <- tolower(unlist(strsplit(string, '\\*'))[2])
+  chk <- unlist(strsplit(string, '\\*'))[2]
   # if the checksum signifier * is missing, that's a fail anyway
   if(is.na(chk)) { return(FALSE) }
   # fn still works if starting $ missing already
   prs <- gsub('^\\$', '', prs)
-  prs <- sapply(unlist(strsplit(prs, '*')), charToRaw)
+  prs <- as.integer(sapply(unlist(strsplit(prs, '*')), charToRaw))
 
-  prs_chksum <- base::Reduce(xor, prs)
+  prs_checksum <- 0
+  for (byte in prs) {
+    prs_checksum <- bitwXor(prs_checksum, byte)
+  }
+  prs_checksum <- toupper(sprintf("%02X", prs_checksum))
 
   # good ol' coercion rules, see ?base::Comparison
-  if(prs_chksum == chk) { TRUE } else { FALSE }
+  if(prs_checksum == chk) { TRUE } else { FALSE }
 }
 
 #' Process NMEA-0183 G*GGA messages
