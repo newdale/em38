@@ -19,7 +19,7 @@ process_fheader <- function(file_header = NULL) {
                         'unit_type', 'dipole_mode',  'survey_mode',
                   'instrument_type',   'file_name', 'time_samples')
 
-  out[['prog_file_id']]    <- rawToChar(file_header[1, 1:7])
+  out[['prog_file_id']]    <- trimws(rawToChar(file_header[1, 1:7])) ##NAV is 6 but 7 is empty so this works by adding trimws
   out[['version_no']]      <- as.numeric(rawToChar(file_header[1, 10:12]))/100
   out[['survey_type']]     <- rawToChar(file_header[1, 13:15])
   out[['unit_type']]       <- switch(rawToChar(file_header[1, 16]),
@@ -72,10 +72,10 @@ process_slheader <- function(survline_header = NULL) {
   out[['line_name']]         <-  trimws(rawToChar(survline_header[1, 2:9]))
   out[['start_station']]     <-  as.numeric(rawToChar(survline_header[2, 2:12]))
   out[['direction']]         <-  rawToChar(survline_header[3, 2]) # consider switch
-  out[['station_increment']] <-  as.numeric(rawToChar(survline_header[3, 9:18]))
+  out[['station_increment']] <-  as.numeric(rawToChar(survline_header[3, 9:19])) #9:19 for NAV, 19 is empty in N38 so go with 19
   # note that no timezone info is embedded in the N38 data file
   # time is currently assumed to be 24h as no AM/PM info is available
-  out[['timestamp']]         <-  as.POSIXlt(rawToChar(survline_header[4, 2:18]),
+  out[['timestamp']]         <-  as.POSIXlt(rawToChar(survline_header[4, 2:18]),# 2:21 because of milliseconds in NAV but we can drop those
                                             format = c('%d%m%Y %H:%M:%OS'))
 
   return(out)
@@ -127,9 +127,9 @@ process_timer <- function(timer_rel = NULL) {
         out  <- vector('list', length = 2)
   names(out) <- c('computer_time', 'timestamp_ms')
   # may combine these later, not sure how best to handle yet
-  out[['computer_time']] <- as.POSIXlt(rawToChar(timer_rel[2:13]), format = '%H:%M:%OS')
+  out[['computer_time']] <- as.POSIXlt(rawToChar(timer_rel[2:13]), format = '%H:%M:%OS') #2:12 in NAV but 13 is empty so keep 13
   # sometimes timestamps are too big for integer format (2023-09-24)
-  out[['timestamp_ms']]  <- as.numeric(rawToChar(timer_rel[16:25]))
+  out[['timestamp_ms']]  <- as.numeric(rawToChar(timer_rel[16:25])) # 17:26 in NAV, this is an issue
 
   return(out)
 
@@ -240,7 +240,7 @@ process_nstat <- function(nstat = NULL) {
   names(out) <- c('new_station', 'timestamp_ms')
 
   out[['new_station']]  <- as.integer(rawToChar(nstat[2:12]))
-  out[['timestamp_ms']] <- as.numeric(rawToChar(nstat[16:25]))
+  out[['timestamp_ms']] <- as.numeric(rawToChar(nstat[16:25])) #this is 17:26 for NAV
 
   out
 }

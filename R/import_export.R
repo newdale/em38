@@ -31,7 +31,7 @@ n38_import <- function(path = NULL, type = NULL) {
     # chuck the line end column
     n38_mat <- n38_mat[, -27]
     #for Geomar data, we need to re-organize to get calibration data in right place
-    n38_mat[c(1:3,10:13,4:9,14:nrow(n38_mat)), ] #need to re-order header rows in raw matrix
+    n38_mat[c(1:2,10:13,4:9,14:nrow(n38_mat)), ] #need to re-order header rows in raw matrix, and drop the row starting with G (row 3)
 
      }else{
 
@@ -70,7 +70,7 @@ n38_chunk <- function(n38_mat = NULL) {
   # populate said list with parts of the input matrix as appropriate
 
   # file header
-  ifelse(!is.na(match('E', rids)), fh_rns<- match('E',rids), fh_rns<- match('N',rids))
+  ifelse(!is.na(match('E', rids)), fh_rns<- match('E',rids), fh_rns<- match('N',rids)) #need to match E for N38 but N for N382
   out_list[['file_header']] <- n38_mat[fh_rns:(fh_rns + 1), ]
 
   # get each survey line start and end row numbers into two vectors
